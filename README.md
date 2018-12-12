@@ -5,7 +5,7 @@ SSH Address: 18.211.87.104
 
 SSH Port: 2200
 
-Account: grader/grader
+Account: grader
 
 URL of Hosted Web Application: http://18.211.87.104 (uses Github authorization)
 
