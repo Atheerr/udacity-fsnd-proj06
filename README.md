@@ -211,8 +211,7 @@ ubuntu@ip-172-26-1-224:/var/www$ sudo chown -R ubuntu:ubuntu /var/www/catalog
 ```
 
 #### Create WSGI Conf Files
-. Create catalog.wsgi file in /var/www/catalog.
-The OAUTH_INSECURE_TRANSPORT variable is needed by Flask-Dance for authorization without SSL. Note: this is done only for testing; a production application should have a proper SSL certificate installed.
+Create catalog.wsgi file in /var/www/catalog. The OAUTH_INSECURE_TRANSPORT variable is needed by Flask-Dance for authorization without SSL. Note: this is done only for testing; a production application should have a proper SSL certificate installed.
 ```
 # flask-dance 
 import os
