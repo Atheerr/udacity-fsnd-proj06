@@ -296,3 +296,11 @@ ubuntu@ip-172-26-1-224:/var/www/catalog$ sudo systemctl reload apache2
 - https://modwsgi.readthedocs.io/en/develop/
 - Flask Dance [docs](https://flask-dance.readthedocs.io/en/latest/)
 - Flask mod_wsgi deployment [docs](http://flask.pocoo.org/docs/1.0/deploying/mod_wsgi/)
+
+## Future Enhancements
+
+- Refactor the application to be scaleable
+- Dockerize the application 
+- Deploy application and database as separate containers using docker-compose on a single server
+- Create a Helm chart and deploy on Kubernetes
+
