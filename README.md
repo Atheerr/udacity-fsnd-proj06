@@ -22,7 +22,7 @@ URL of Hosted Web Application: http://18.211.87.104 (uses Github authorization)
 
 1. Create/attach static IP
 
-2. Configure Lightsail firewall
+2. Configure Lightsail firewall; note: I enabled https in case I want to install an SSL certificate in the future.
 
 	![project6-networking](/docs/project6-networking.png)
 
@@ -115,9 +115,10 @@ Note: I enabled https in case I want to install an SSL certificate in the future
 
 Modify sshd_config to listen on port 2200 and to not allow root access:
 
-AllowUsers ubuntu grader
-Port 2200
-PermitRootLogin no
+- AllowUsers ubuntu grader
+
+- Port 2200
+- PermitRootLogin no
 
 ```
 ubuntu@ip-172-26-1-224:~$ sudo nano /etc/ssh/sshd_config
@@ -211,7 +212,7 @@ ubuntu@ip-172-26-1-224:/var/www$ sudo chown -R ubuntu:ubuntu /var/www/catalog
 
 #### Create WSGI Conf Files
 . Create catalog.wsgi file in /var/www/catalog.
-The OAUTH_INSECURE_TRANSPORT variable is needed by Flask-Dance for authorization with SSL. Note: this is done only for testing; a production application should have a proper SSL certificate installed.
+The OAUTH_INSECURE_TRANSPORT variable is needed by Flask-Dance for authorization without SSL. Note: this is done only for testing; a production application should have a proper SSL certificate installed.
 ```
 # flask-dance 
 import os
