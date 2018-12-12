@@ -45,7 +45,7 @@ CLIENT_ID = json.loads(
     open('/var/www/catalog/client_secret.json', 'r').read())['github']['client_id']
 CLIENT_SECRET = json.loads(
     open('/var/www/catalog/client_secret.json', 'r').read())['github']['client_secret']
-    
+
 app.config['SECRET_KEY'] = CLIENT_SECRET
 
 # create flask-dance blueprint and register it
@@ -54,8 +54,9 @@ blueprint = make_github_blueprint(client_id=CLIENT_ID,
 app.register_blueprint(blueprint, url_prefix='/login')
 
 # set up the database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///catalog.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/catalog.db'
 db = SQLAlchemy()
+
 
 
 # set up data models
