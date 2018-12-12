@@ -1,74 +1,194 @@
-# udacity-fsnd-proj06
-project 6 - final project
+# Udacity Full Stack Web Developer Project 6 - Linux Server Configuration
+## Udacity Reviewer
 
-create lighsail instance with my own public key
-aimeeu-udacity-fsnd-p6
+Public IP Address: 18.211.87.104
 
-create a static IP and attach to instance
-public IP: 34.193.161.246
+SSH Port: 2200
 
-ssh ubuntu@34.193.161.246
+Account: grader/grader
 
-update firewall
-https://lightsail.aws.amazon.com/ls/docs/en/articles/understanding-firewall-and-port-mappings-in-amazon-lightsail
+URL of Hosted Web Application: http://18.211.87.104/ (uses Github authorization)
 
-use http://xip.io/ to set up DNS
+## Cloud Server
 
-
-
-Your README.md file should include all of the following:
-i. The IP address and SSH port so your server can be accessed by the reviewer.
-ii. The complete URL to your hosted web application.
-iii. A summary of software you installed and configuration changes made.
-iv. A list of any third-party resources you made use of to complete this project.
-
-Locate the SSH key you created for the grader user.
-
-During the submission process, paste the contents of the grader user's SSH key into the "Notes to Reviewer" field.
+- Amazon Lightsail server 512 MB RAM, 1 vCPU, 20 GB SSD
+- Ubuntu 18.04 LTS
 
 
-How will I complete this project?
 
-This project is linked to the Configuring Linux Web Servers course, which teaches you to secure and set up a Linux server. By the end of this project, you will have one of your web applications running live on a secure web server.
+## Summary of Configuration
 
-To complete this project, you'll need a Linux server instance. We recommend using Amazon Lightsail for this. If you don't already have an Amazon Web Services account, you'll need to set one up. Once you've done that, here are the steps to complete this project.
-Get your server.
+### Lightsail Configuration
 
-1. Start a new Ubuntu Linux server instance on Amazon Lightsail. There are full details on setting up your Lightsail instance on the next page.
-2. Follow the instructions provided to SSH into your server.
-  Secure your server.
+### ![lightsail-main](/home/aimeeu/Dev/git/github.com/aimeeu/udacity-fsnd-proj06/docs/lightsail-main.png)
 
-3. Update all currently installed packages.
-4. Change the SSH port from 22 to 2200. Make sure to configure the Lightsail firewall to allow it.
-5. Configure the Uncomplicated Firewall (UFW) to only allow incoming connections for SSH (port 2200), HTTP (port 80), and NTP (port 123).
+1. Create/attach static IP
 
-    Warning: When changing the SSH port, make sure that the firewall is open for port 2200 first, so that you don't lock yourself out of the server. When you change the SSH port, the Lightsail instance will no longer be accessible through the web app 'Connect using SSH' button. The button assumes the default port is being used. There are instructions on the same page for connecting from your terminal to the instance. Connect using those instructions and then follow the rest of the steps.
+2. Configure Lightsail firewall
 
-Give grader access.
+   ![project6-networking](/home/aimeeu/Dev/git/github.com/aimeeu/udacity-fsnd-proj06/docs/project6-networking.png)
 
-In order for your project to be reviewed, the grader needs to be able to log in to your server.
+## Summary of Software Installed
+- aptitude
+- ufw
+- apache2
+- libapache2-mod-wsgi-py3
+- python3-dev
+- python3-pip
+- Udacity Full Stack Web Developer - Project 4 - Item Catalog and required packages
 
-6. Create a new user account named grader.
+### Server Configuration 
 
-7. Give grader the permission to sudo.
+#### Update OS
 
-8. Create an SSH key pair for grader using the ssh-keygen tool.
-  Prepare to deploy your project.
+```
+ubuntu@ip-172-26-1-224:~$ sudo apt-get update
+ubuntu@ip-172-26-1-224:~$ sudo apt-get dist-upgrade
+```
+#### Set Local Time to UTC
 
-9. Configure the local timezone to UTC.
+```
+ubuntu@ip-172-26-1-224:~$ sudo timedatectl set-timezone UTC
+ubuntu@ip-172-26-1-224:~$ timedatectl
+                      Local time: Tue 2018-12-11 17:23:42 UTC
+                  Universal time: Tue 2018-12-11 17:23:42 UTC
+                        RTC time: Tue 2018-12-11 17:23:43
+                       Time zone: UTC (UTC, +0000)
+       System clock synchronized: yes
+systemd-timesyncd.service active: yes
+                 RTC in local TZ: no
+```
 
-10. Install and configure Apache to serve a Python mod_wsgi application.
+#### Add Grader User
 
-    If you built your project with Python 3, you will need to install the Python 3 mod_wsgi package on your server: sudo apt-get install libapache2-mod-wsgi-py3.
+```
+ubuntu@ip-172-26-1-224:~$ sudo adduser grader
+Adding user `grader' ...
+Adding new group `grader' (1001) ...
+Adding new user `grader' (1001) with group `grader' ...
+Creating home directory `/home/grader' ...
+Copying files from `/etc/skel' ...
+Enter new UNIX password: 
+Retype new UNIX password: 
+passwd: password updated successfully
+Changing the user information for grader
+Enter the new value, or press ENTER for the default
+	Full Name []: Udacity Grader
+	Room Number []: 
+	Work Phone []: 
+	Home Phone []: 
+	Other []: 
+Is the information correct? [Y/n] y
+ubuntu@ip-172-26-1-224:~$ sudo usermod -aG sudo grader
+```
+#### Add SSH Key to Authorized Keys
 
-11. Install and configure PostgreSQL:
+```
+ubuntu@ip-172-26-1-224:~$ cd /home/grader
+ubuntu@ip-172-26-1-224:/home/grader$ sudo mkdir .ssh
+ubuntu@ip-172-26-1-224:/home/grader$ cd .ssh
+ubuntu@ip-172-26-1-224:/home/grader/.ssh$ sudo nano authorized_keys
+```
+#### Install, Configure, and Enable the Uncomplicated Firewall (ufw)
 
-    Do not allow remote connections
-    Create a new database user named catalog that has limited permissions to your catalog application database.
+```
+ubuntu@ip-172-26-1-224:~$ sudo aptitude install ufw
+ubuntu@ip-172-26-1-224:/home/grader/.ssh$ sudo ufw allow 2200
+Rules updated
+Rules updated (v6)
+ubuntu@ip-172-26-1-224:/home/grader/.ssh$ sudo ufw allow http
+Rules updated
+Rules updated (v6)
+ubuntu@ip-172-26-1-224:/home/grader/.ssh$ sudo ufw allow https
+Rules updated
+Rules updated (v6)
+ubuntu@ip-172-26-1-224:/home/grader/.ssh$ sudo ufw allow 123
+Rules updated
+Rules updated (v6)
+ubuntu@ip-172-26-1-224:~$ sudo ufw enable
+Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
+Firewall is active and enabled on system startup
+ubuntu@ip-172-26-1-224:~$ sudo ufw status
+Status: active
+```
+#### Modify sshd_config
 
-12. Install git.
-    Deploy the Item Catalog project.
+Modify sshd_config to listen on port 2200 and to not allow root access:
 
-13. Clone and setup your Item Catalog project from the Github repository you created earlier in this Nanodegree program.
+AllowUsers ubuntu grader
+Port 2200
+PermitRootLogin no
 
-14. Set it up in your server so that it functions correctly when visiting your server’s IP address in a browser. Make sure that your .git directory is not publicly accessible via a browser
+```
+ubuntu@ip-172-26-1-224:~$ sudo nano /etc/ssh/sshd_config
+ubuntu@ip-172-26-1-224:~$ sudo reboot
+```
+Verify grader ssh access:
+```
+aimeeu@aimeeu-7520:~$ ssh grader@18.211.87.104 -p 2200
+Welcome to Ubuntu 18.04.1 LTS (GNU/Linux 4.15.0-1029-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Wed Dec 12 18:27:45 UTC 2018
+
+  System load:  0.0                Processes:           88
+  Usage of /:   10.8% of 19.32GB   Users logged in:     0
+  Memory usage: 44%                IP address for eth0: 172.26.1.224
+  Swap usage:   0%
+
+ * MicroK8s is Kubernetes in a snap. Made by devs for devs.
+   One quick install on a workstation, VM, or appliance.
+
+   - https://bit.ly/microk8s
+
+ * Full K8s GPU support is now available! Get it in MicroK8s, CDK,
+   and on GKE with Ubuntu workers.
+
+   - https://blog.ubuntu.com/2018/12/10/using-gpgpus-with-kubernetes
+
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+ * Canonical Livepatch is available for installation.
+   - Reduce system reboots and improve kernel security. Activate at:
+     https://ubuntu.com/livepatch
+
+0 packages can be updated.
+0 updates are security updates.
+
+
+Last login: Tue Dec 11 17:20:48 2018 from 99.129.239.198
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+```
+
+#### Install Apache2, WSGI
+```
+ubuntu@ip-172-26-1-224:~$ sudo apt-get install apache2
+ubuntu@ip-172-26-1-224:~$ apachectl -V
+Server version: Apache/2.4.29 (Ubuntu)
+Server built:   2018-10-10T18:59:25
+Server's Module Magic Number: 20120211:68
+Server loaded:  APR 1.6.3, APR-UTIL 1.6.1
+Compiled using: APR 1.6.3, APR-UTIL 1.6.1
+Architecture:   64-bit
+Server MPM:     event
+  threaded:     yes (fixed thread count)
+    forked:     yes (variable process count)
+ubuntu@ip-172-26-1-224:~$ sudo apt-get install libapache2-mod-wsgi-py3 python3-dev
+ubuntu@ip-172-26-1-224:~$ sudo a2enmod wsgi
+ubuntu@ip-172-26-1-224:~$ sudo apache2ctl restart 
+ubuntu@ip-172-26-1-224:~$ sudo ufw app list
+Available applications:
+  Apache
+  Apache Full
+  Apache Secure
+  OpenSSH
+ubuntu@ip-172-26-1-224:~$ sudo ufw allow 'Apache Full'
+Rules updated
+Rules updated (v6)
+```
