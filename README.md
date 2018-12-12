@@ -1,32 +1,30 @@
 # Udacity Full Stack Web Developer Project 6 - Linux Server Configuration
 ## Udacity Reviewer
 
-Public IP Address: 18.211.87.104
+SSH Address: 18.211.87.104
 
 SSH Port: 2200
 
 Account: grader/grader
 
-URL of Hosted Web Application: http://18.211.87.104/ (uses Github authorization)
+URL of Hosted Web Application: http://18.211.87.104 (uses Github authorization)
 
 ## Cloud Server
 
 - Amazon Lightsail server 512 MB RAM, 1 vCPU, 20 GB SSD
 - Ubuntu 18.04 LTS
 
-
-
 ## Summary of Configuration
 
 ### Lightsail Configuration
 
-### ![lightsail-main](/home/aimeeu/Dev/git/github.com/aimeeu/udacity-fsnd-proj06/docs/lightsail-main.png)
+	![lightsail-main](/docs/lightsail-main.png)
 
 1. Create/attach static IP
 
 2. Configure Lightsail firewall
 
-   ![project6-networking](/home/aimeeu/Dev/git/github.com/aimeeu/udacity-fsnd-proj06/docs/project6-networking.png)
+	![project6-networking](/docs/project6-networking.png)
 
 ## Summary of Software Installed
 - aptitude
@@ -285,7 +283,7 @@ ubuntu@ip-172-26-1-224:/var/www/catalog$ sudo systemctl reload apache2
 ```
 #### Test the Catalog Application
 
-![app-running](/home/aimeeu/Dev/git/github.com/aimeeu/udacity-fsnd-proj06/docs/app-running.png)
+	![app-running](/docs/app-running.png)
 
 ## Third-Party Resources Used For This Project
 
